@@ -7,7 +7,7 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { ICON } from './icons.js';
-import { parseVideoLink, resolveThumbnail, isPdfUrl } from './link-utils.js';
+import { parseVideoLink, resolveThumbnail, isPdfUrl, sanitizeSvgIcon, safeContactUrl } from './link-utils.js';
 
 const DEFAULT_PROFILE = {
   name: 'Michel Rezini',
@@ -26,6 +26,19 @@ const DEFAULT_PROFILE = {
     { name: 'Inteligência Artificial', level: 75 },
   ],
 };
+
+// Fallback shown until the admin adds real contacts in the panel (or if
+// Firestore is unreachable) — mirrors what this section used to have
+// hardcoded: e-mail (opens a pre-filled draft) and Discord (copies the tag).
+const DEFAULT_CONTACTS = [
+  {
+    name: 'E-mail',
+    icon: ICON.mail,
+    type: 'link',
+    value: 'mailto:c0d3xed@gmail.com?subject=Novo%20projeto%20de%20edi%C3%A7%C3%A3o&body=Ol%C3%A1%20Michel%2C%0D%0A%0D%0AQuero%20conversar%20sobre%20um%20projeto.%0D%0A%0D%0AObjetivo%3A%20%0D%0APrazo%3A%20%0D%0AMaterial%20bruto%20dispon%C3%ADvel%3A%20',
+  },
+  { name: 'Discord', icon: ICON.discord, type: 'copy', value: '@c0d3xx' },
+];
 
 const TOOL_ICON_MAP = {
   'shotcut': ICON.scissors,
@@ -163,21 +176,47 @@ function showToast(msg, type = 'ok') {
   showToast._t = setTimeout(() => toast.classList.remove('show'), 2600);
 }
 
-function initContactCopy() {
-  document.querySelectorAll('.copy-item').forEach((item) => {
-    item.addEventListener('click', async () => {
-      const text = item.dataset.copy;
-      try { await navigator.clipboard.writeText(text); showToast(`Copiado: ${text}`); }
-      catch (_) { showToast('Não foi possível copiar automaticamente', 'err'); }
-    });
+function renderContactButtons(list) {
+  const wrap = document.getElementById('contactActions');
+  if (!wrap) return;
+  if (!list.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = list.map((c, i) => {
+    const cls = `btn ${i === 0 ? 'btn-primary' : 'btn-ghost'} contact-btn`;
+    const icon = sanitizeSvgIcon(c.icon) || ICON.link;
+    const name = escapeHtml(c.name || '');
+    if (c.type === 'copy') {
+      return `<button type="button" class="${cls}" data-copy="${escapeHtml(c.value || '')}">${icon}${name}</button>`;
+    }
+    const href = safeContactUrl(c.value);
+    if (!href) return `<span class="${cls}" style="opacity:.55;">${icon}${name}</span>`;
+    const external = /^https?:/i.test(href);
+    return `<a class="${cls}" href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}>${icon}${name}</a>`;
+  }).join('');
+}
+
+// Click handling is delegated on the wrapper since the buttons are
+// re-rendered from Firestore data after this listener is attached once.
+function initContactActions() {
+  const wrap = document.getElementById('contactActions');
+  if (!wrap) return;
+  wrap.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-copy]');
+    if (!btn) return;
+    const text = btn.dataset.copy;
+    if (!text) return;
+    try { await navigator.clipboard.writeText(text); showToast(`Copiado: ${text}`); }
+    catch (_) { showToast('Não foi possível copiar automaticamente', 'err'); }
   });
-  const discordBtn = document.getElementById('discordBtn');
-  if (discordBtn) {
-    discordBtn.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText('@c0d3xx'); showToast('Discord copiado: @c0d3xx — me chama por lá'); }
-      catch (_) { showToast('Meu Discord é @c0d3xx'); }
-    });
-  }
+}
+
+async function loadContacts() {
+  try {
+    const snap = await getDocs(collection(db, 'contacts'));
+    const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    if (!list.length) return DEFAULT_CONTACTS;
+    list.sort((a, b) => (a.order ?? a.createdAt ?? 0) - (b.order ?? b.createdAt ?? 0));
+    return list;
+  } catch (e) { console.warn('Contatos indisponíveis, usando dados padrão.', e); return DEFAULT_CONTACTS; }
 }
 
 /* ---------------- Data loading ---------------- */
@@ -414,7 +453,7 @@ async function init() {
   initNav();
   buildRingTicks();
   initRecTimer();
-  initContactCopy();
+  initContactActions();
   initReveal();
 
   document.getElementById('modalCloseBtn').addEventListener('click', closeProjectModal);
@@ -431,12 +470,14 @@ async function init() {
   renderTools(profile);
   renderSkillsPanel(profile);
 
-  const [certs, projects] = await Promise.all([
+  const [certs, projects, contacts] = await Promise.all([
     loadCollection('certificates', 'startDate'),
     loadCollection('projects', 'dateDelivered'),
+    loadContacts(),
   ]);
   renderCertificates(certs);
   renderProjects(projects);
+  renderContactButtons(contacts);
   initStatCounters(profile, certs, projects);
 }
 

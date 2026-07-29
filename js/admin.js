@@ -22,7 +22,7 @@ import {
   doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc,
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import { ICON } from './icons.js';
-import { parseVideoLink, resolveThumbnail, isPdfUrl } from './link-utils.js';
+import { parseVideoLink, resolveThumbnail, isPdfUrl, sanitizeSvgIcon } from './link-utils.js';
 
 // The Firebase Auth account used to sign in to this panel. Create this user
 // (Authentication → Users → Add user) in the Firebase console — see README.
@@ -144,7 +144,7 @@ document.querySelectorAll('.tab-btn').forEach((btn) => {
 });
 
 async function initDashboardData() {
-  await Promise.all([loadProfileIntoForm(), loadCertificates(), loadProjects()]);
+  await Promise.all([loadProfileIntoForm(), loadCertificates(), loadProjects(), loadContacts()]);
 }
 
 /* ================= PROFILE ================= */
@@ -561,7 +561,183 @@ async function deleteProject(id) {
   } catch (err) { console.error(err); showToast('Erro ao excluir projeto.', 'err'); }
 }
 
+/* ================= CONTACTS ================= */
+let contactsCache = [];
+let editingContactId = null;
+
+function updateContactIconPreview(raw) {
+  const el = document.getElementById('contactIconPreview');
+  const clean = sanitizeSvgIcon(raw);
+  const hasInput = !!(raw && raw.trim());
+  if (!clean) {
+    el.querySelector('.link-preview-icon').innerHTML = ICON.alert;
+    el.querySelector('.link-preview-text').textContent = hasInput
+      ? 'Isso não parece um <svg>...</svg> válido — confira o código colado.'
+      : 'Cole o SVG para ver a prévia aqui.';
+    el.querySelector('.link-preview-text').classList.toggle('err', hasInput);
+    return;
+  }
+  el.querySelector('.link-preview-icon').innerHTML = clean;
+  el.querySelector('.link-preview-text').textContent = 'Ícone reconhecido.';
+  el.querySelector('.link-preview-text').classList.remove('err');
+}
+
+function updateContactValueField() {
+  const type = document.getElementById('contactType').value;
+  const label = document.getElementById('contactValueLabel');
+  const input = document.getElementById('contactValue');
+  const hint = document.getElementById('contactValueHint');
+  if (type === 'copy') {
+    label.textContent = 'Texto para copiar (opcional)';
+    input.placeholder = 'Ex: seu-usuario ou @seu-usuario';
+    hint.textContent = 'Esse texto é copiado para a área de transferência quando alguém clica — ex: seu nome de usuário do GitHub.';
+  } else {
+    label.textContent = 'Link do contato (opcional)';
+    input.placeholder = 'https://instagram.com/seu-usuario';
+    hint.textContent = 'Link que abre direto em uma nova aba — ex: o link do seu perfil do Instagram. Aceita http(s), e-mail (mailto:) ou telefone (tel:).';
+  }
+}
+
+async function loadContacts() {
+  try {
+    const snap = await getDocs(collection(db, 'contacts'));
+    contactsCache = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    contactsCache.sort((a, b) => (a.order ?? a.createdAt ?? 0) - (b.order ?? b.createdAt ?? 0));
+  } catch (err) { console.warn('Não foi possível carregar contatos.', err); contactsCache = []; }
+  renderContactList();
+}
+
+function renderContactList() {
+  const wrap = document.getElementById('contactList');
+  if (!contactsCache.length) {
+    wrap.innerHTML = `<div class="empty-note">Nenhum contato cadastrado ainda — o site mostra e-mail e Discord como padrão até você adicionar os seus.</div>`;
+    return;
+  }
+  wrap.innerHTML = contactsCache.map((c, i) => {
+    const icon = sanitizeSvgIcon(c.icon) || ICON.link;
+    const actionLabel = c.type === 'copy' ? 'copia' : 'abre link';
+    const valuePreview = c.value ? escapeHtml(c.value) : 'sem valor definido';
+    return `
+    <div class="item-row">
+      <div class="item-thumb">${icon}</div>
+      <div class="item-info">
+        <h4>${escapeHtml(c.name || '')}</h4>
+        <span>${actionLabel} · ${valuePreview}</span>
+      </div>
+      <div class="item-actions">
+        <button type="button" class="icon-btn icon-btn-xs contact-up" data-id="${c.id}" aria-label="Mover para cima" ${i === 0 ? 'disabled' : ''}>${ICON.arrowUp}</button>
+        <button type="button" class="icon-btn icon-btn-xs contact-down" data-id="${c.id}" aria-label="Mover para baixo" ${i === contactsCache.length - 1 ? 'disabled' : ''}>${ICON.arrowDown}</button>
+        <button class="icon-btn contact-edit" data-id="${c.id}">${ICON.edit}</button>
+        <button class="icon-btn contact-del" data-id="${c.id}">${ICON.trash}</button>
+      </div>
+    </div>
+  `;
+  }).join('');
+  wrap.querySelectorAll('.contact-edit').forEach((b) => b.addEventListener('click', () => openContactDrawer(b.dataset.id)));
+  wrap.querySelectorAll('.contact-del').forEach((b) => b.addEventListener('click', () => {
+    if (confirm('Excluir este contato? Essa ação não pode ser desfeita.')) deleteContact(b.dataset.id);
+  }));
+  wrap.querySelectorAll('.contact-up').forEach((b) => b.addEventListener('click', () => moveContact(b.dataset.id, -1)));
+  wrap.querySelectorAll('.contact-down').forEach((b) => b.addEventListener('click', () => moveContact(b.dataset.id, 1)));
+}
+
+// Reordering rewrites the `order` field for the whole list as 0..n-1 each
+// time, so it self-heals regardless of how items were sorted before (by
+// createdAt fallback, a partial previous reorder, etc.).
+async function moveContact(id, direction) {
+  const idx = contactsCache.findIndex((c) => c.id === id);
+  const newIdx = idx + direction;
+  if (idx === -1 || newIdx < 0 || newIdx >= contactsCache.length) return;
+  const reordered = [...contactsCache];
+  [reordered[idx], reordered[newIdx]] = [reordered[newIdx], reordered[idx]];
+  try {
+    await Promise.all(reordered.map((c, i) => updateDoc(doc(db, 'contacts', c.id), { order: i })));
+    await loadContacts();
+  } catch (err) { console.error(err); showToast('Erro ao reordenar contatos.', 'err'); }
+}
+
+function openContactDrawer(id) {
+  editingContactId = id || null;
+  document.getElementById('contactForm').reset();
+  document.getElementById('contactDeleteBtn').style.display = id ? 'inline-flex' : 'none';
+  document.getElementById('contactDrawerTitle').textContent = id ? 'Editar contato' : 'Novo contato';
+  document.getElementById('contactId').value = id || '';
+
+  let iconVal = '';
+  if (id) {
+    const c = contactsCache.find((x) => x.id === id);
+    document.getElementById('contactName').value = c.name || '';
+    document.getElementById('contactType').value = c.type === 'copy' ? 'copy' : 'link';
+    document.getElementById('contactValue').value = c.value || '';
+    iconVal = c.icon || '';
+  } else {
+    document.getElementById('contactType').value = 'link';
+  }
+  document.getElementById('contactIcon').value = iconVal;
+  updateContactIconPreview(iconVal);
+  updateContactValueField();
+  document.getElementById('contactDrawer').classList.add('open');
+}
+function closeContactDrawer() { document.getElementById('contactDrawer').classList.remove('open'); }
+
+document.getElementById('newContactBtn').addEventListener('click', () => openContactDrawer(null));
+document.getElementById('contactDrawerClose').addEventListener('click', closeContactDrawer);
+document.getElementById('contactDrawer').addEventListener('click', (e) => { if (e.target.id === 'contactDrawer') closeContactDrawer(); });
+document.getElementById('contactIcon').addEventListener('input', (e) => updateContactIconPreview(e.target.value));
+document.getElementById('contactType').addEventListener('change', updateContactValueField);
+
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('contactSaveBtn');
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const cleanIcon = sanitizeSvgIcon(document.getElementById('contactIcon').value.trim());
+    if (!cleanIcon) {
+      showToast('O SVG do ícone parece inválido — confira o código colado.', 'err');
+      return;
+    }
+    const payload = {
+      name: document.getElementById('contactName').value.trim(),
+      icon: cleanIcon,
+      type: document.getElementById('contactType').value === 'copy' ? 'copy' : 'link',
+      value: document.getElementById('contactValue').value.trim(),
+    };
+    if (editingContactId) {
+      await updateDoc(doc(db, 'contacts', editingContactId), payload);
+    } else {
+      payload.createdAt = Date.now();
+      await addDoc(collection(db, 'contacts'), payload);
+    }
+    showToast('Contato salvo!');
+    closeContactDrawer();
+    await loadContacts();
+  } catch (err) {
+    console.error(err);
+    showToast('Erro ao salvar contato.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+});
+
+document.getElementById('contactDeleteBtn').addEventListener('click', () => {
+  if (editingContactId && confirm('Excluir este contato? Essa ação não pode ser desfeita.')) {
+    deleteContact(editingContactId);
+    closeContactDrawer();
+  }
+});
+
+async function deleteContact(id) {
+  try {
+    await deleteDoc(doc(db, 'contacts', id));
+    showToast('Contato excluído.');
+    await loadContacts();
+  } catch (err) { console.error(err); showToast('Erro ao excluir contato.', 'err'); }
+}
+
 /* ================= Global escape key for drawers ================= */
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeCertDrawer(); closeProjectDrawer(); }
+  if (e.key === 'Escape') { closeCertDrawer(); closeProjectDrawer(); closeContactDrawer(); }
 });

@@ -104,7 +104,7 @@ mostro o passo a passo alternativo.
 
 1. Acesse `https://seu-dominio/admCDX`.
 2. Digite a senha cadastrada no passo 2.1.
-3. Três abas:
+3. Quatro abas:
    - **Perfil** — link da foto, nome, cargo, descrição, localização, data de
      nascimento (a idade no site é **calculada automaticamente** a partir
      dela, sempre atualizada), formação atual, status de disponibilidade e
@@ -124,6 +124,21 @@ mostro o passo a passo alternativo.
      miniatura padrão do próprio vídeo (do YouTube, isso é instantâneo; do
      Vimeo, busca automaticamente; de outras plataformas, mostra um botão
      "assistir vídeo" que abre o link).
+   - **Contatos** — os botões que aparecem na seção "Contato" do site.
+     Clique em "Novo contato" e preencha: **nome** (ex: Instagram, GitHub,
+     WhatsApp), o **SVG do ícone** (cole o código `<svg>...</svg>` de um
+     ícone — dá pra pegar de sites como Simple Icons ou Bootstrap Icons),
+     e o **link opcional**. O campo "Ao clicar…" decide o comportamento:
+     - *Abrir um link* — o botão vira um link de verdade (útil pro
+       Instagram, por exemplo: cole o link do seu perfil e o botão abre
+       direto nele).
+     - *Copiar texto para a área de transferência* — o botão copia o
+       texto que você colocar (útil pro GitHub, por exemplo: coloque seu
+       nome de usuário e o botão copia ele, em vez de abrir um link).
+
+     Use as setinhas ↑ ↓ de cada contato para reordenar como eles aparecem
+     no site. Se você não cadastrar nenhum contato, o site mostra e-mail e
+     Discord como padrão (os mesmos que já estavam fixos antes).
 4. Clique em **Salvar** — a mudança aparece no site público na hora
    (sem precisar reimplantar nada).
 5. **Sair** desconecta o login com segurança.
@@ -137,6 +152,7 @@ mostro o passo a passo alternativo.
 | `config/profile` (documento único) | `name, role, bio, location, birthdate, education, available, availableText, photoURL, skills: [{name, level}]` |
 | `certificates/{id}` | `title, teaches, description, startDate, endDate, badgeURL` |
 | `projects/{id}` | `title, client, description, videoLink, dateReceived, dateDelivered, coverURL` |
+| `contacts/{id}` | `name, icon (SVG), type ("link" ou "copy"), value, order` |
 
 Você não precisa mexer nisso manualmente — é só o que o painel grava. Documentando aqui só para referência caso queira consultar direto no Firebase Console.
 
@@ -147,7 +163,7 @@ Você não precisa mexer nisso manualmente — é só o que o painel grava. Docu
 - **Cores**: tudo em `css/base.css`, no bloco `:root` (procure por `--blue`, `--void`, etc.).
 - **Fontes**: já configuradas conforme pedido (Fredoka / Space Grotesk / Inter), carregadas via Google Fonts no `<head>` de `index.html` e `admin.html`.
 - **Textos fixos** (parágrafo de contato, headline da seção de projetos, etc.): estão direto no `index.html`, em português, prontos para editar se quiser ajustar o tom.
-- **E-mail e Discord de contato**: aparecem em `index.html` (busque por `c0d3xed@gmail.com` e `c0d3xx`).
+- **Botões de contato** (e-mail, Discord, Instagram, GitHub, etc.): agora são gerenciados na aba **Contatos** do painel — veja a seção 3. Enquanto você não cadastrar nenhum, o site mostra e-mail e Discord como padrão (definidos em `js/main.js`, na constante `DEFAULT_CONTACTS`).
 
 ---
 

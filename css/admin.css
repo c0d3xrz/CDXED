@@ -113,6 +113,11 @@ body{ min-height: 100vh; }
 }
 .icon-btn:hover{ color: var(--danger); border-color: rgba(255,93,108,.35); }
 .icon-btn svg{ width: 16px; height: 16px; }
+.icon-btn:disabled{ opacity: .35; cursor: not-allowed; }
+.icon-btn:disabled:hover{ color: var(--ink-dim); border-color: var(--line-strong); }
+.icon-btn-xs{ width: 32px; height: 32px; }
+.icon-btn-xs svg{ width: 14px; height: 14px; }
+.icon-btn-xs:hover{ color: var(--blue-bright); border-color: var(--blue-bright); }
 
 .form-actions{ display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px; }
 
