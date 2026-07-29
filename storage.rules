@@ -1,0 +1,51 @@
+rules_version = '2';
+
+// CDXED — Cloud Storage Security Rules
+//
+// Public visitors can READ files (profile photo, certificate badges,
+// project covers and videos) so the site can display them to anyone.
+// Only a signed-in user (validated by Firebase Authentication through the
+// /admCDX login) can WRITE — i.e. upload, replace or delete files.
+//
+// A 300MB per-file cap is included as a safety net against accidental or
+// abusive huge uploads. Raise/lower the number below if needed.
+//
+// How to apply: Firebase Console → Storage → Rules → paste this entire
+// file → Publish. (Or deploy with the Firebase CLI: `firebase deploy
+// --only storage` using the included firebase.json.)
+//
+// IMPORTANT: Cloud Storage for Firebase now requires the project to be on
+// the Blaze (pay-as-you-go) plan, even for no-cost usage levels. See the
+// README for details.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /profile/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+
+    match /certificates/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+
+    match /projects/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 300 * 1024 * 1024
+                   && (request.resource.contentType.matches('video/.*')
+                       || request.resource.contentType.matches('image/.*'));
+    }
+
+    // Anything else: deny by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

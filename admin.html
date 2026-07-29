@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel administrativo — CDXED</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="shortcut icon" href="favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+    </div>
+    <div class="logo">
+      CD<span class="x">X</span>ED
+    </div>
+    <p class="login-sub">Acesso restrito. Digite a senha para entrar no painel.</p>
+
+    <div class="login-error" id="loginError">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L22 20H2L12 3.5z"/><path d="M12 10v4M12 17.2v.2"/></svg>
+      <span id="loginErrorMsg">Senha incorreta.</span>
+    </div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="pwInput">Senha de acesso</label>
+        <div class="password-wrap">
+          <input type="password" id="pwInput" autocomplete="current-password" required placeholder="••••••••">
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Mostrar senha">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.8-7 10-7 10 7 10 7-3.8 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+        <span id="loginBtnLabel">Entrar</span>
+      </button>
+    </form>
+    <p class="login-note">A autenticação é validada pelo Firebase — a senha nunca fica exposta no código do site.</p>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div class="dashboard" id="dashboard">
+  <header class="topbar">
+    <div class="container">
+      <span class="logo" style="color: var(--blue-bright);">
+        Painel
+      </span>
+      <div class="topbar-right">
+        <a href="/" target="_blank" class="view-site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          Ver site
+        </a>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <nav class="tabs">
+        <button class="tab-btn active" data-tab="perfil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          Perfil
+        </button>
+        <button class="tab-btn" data-tab="certificados">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-2.4 5 2.4-1.5-6.5"/></svg>
+          Certificados
+        </button>
+        <button class="tab-btn" data-tab="projetos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="14" height="13" rx="2"/><path d="M16.5 10l5-3v10l-5-3z"/></svg>
+          Projetos
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ---------- PERFIL ---------- -->
+    <section class="tab-panel active" id="panel-perfil">
+      <div class="panel-head">
+        <div>
+          <h2>Perfil</h2>
+          <p>Essas informações aparecem no topo do site e na seção "Sobre mim".</p>
+        </div>
+      </div>
+
+      <form id="profileForm">
+        <div class="card">
+          <h3>Foto de perfil</h3>
+          <div class="photo-editor">
+            <div class="photo-preview" id="photoPreview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            </div>
+            <div style="flex:1; min-width:220px;">
+              <div class="field" style="margin-bottom:0;">
+                <label for="fPhotoURL">Link da foto</label>
+                <input type="url" id="fPhotoURL" placeholder="https://...">
+              </div>
+              <p class="field-hint">Cole o link direto de uma imagem. Deixe em branco para usar o ícone padrão.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Identidade</h3>
+          <div class="field-row">
+            <div class="field"><label for="fName">Nome</label><input type="text" id="fName" required></div>
+            <div class="field"><label for="fRole">Cargo / título</label><input type="text" id="fRole" required></div>
+          </div>
+          <div class="field"><label for="fBio">Descrição (use uma linha em branco para separar parágrafos)</label><textarea id="fBio" rows="6" required></textarea></div>
+          <div class="field-row">
+            <div class="field"><label for="fLocation">Localização</label><input type="text" id="fLocation" required></div>
+            <div class="field"><label for="fBirthdate">Data de nascimento</label><input type="date" id="fBirthdate" required></div>
+          </div>
+          <div class="field">
+            <label for="fEducation">Formação atual (curta — aparece em um badge no topo do site)</label>
+            <input type="text" id="fEducation" required placeholder="Ex: 2º ano · Téc. em Informática — IFC">
+            <p class="field-hint">Detalhes extras (como "tempo integral") já aparecem automaticamente do lado, na seção Sobre — não precisa repetir aqui.</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="fAvailable">Disponibilidade</label>
+              <select id="fAvailable">
+                <option value="true">Disponível para novos projetos</option>
+                <option value="false">Agenda fechada no momento</option>
+              </select>
+            </div>
+            <div class="field"><label for="fAvailableText">Texto exibido (opcional)</label><input type="text" id="fAvailableText" placeholder="Disponível para novos projetos"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Ferramentas &amp; conhecimentos</h3>
+          <div class="skills-editor" id="skillsEditor"></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="addSkillBtn" style="margin-top:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Adicionar ferramenta
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="saveProfileBtn">Salvar alterações</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ---------- CERTIFICADOS ---------- -->
+    <section class="tab-panel" id="panel-certificados">
+      <div class="panel-head">
+        <div>
+          <h2>Certificados</h2>
+          <p>Cursos e certificações exibidos na linha do tempo de formação.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="newCertBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Novo certificado
+        </button>
+      </div>
+      <div class="item-list" id="certList"></div>
+    </section>
+
+    <!-- ---------- PROJETOS ---------- -->
+    <section class="tab-panel" id="panel-projetos">
+      <div class="panel-head">
+        <div>
+          <h2>Projetos</h2>
+          <p>Vídeos e trabalhos exibidos no portfólio público.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="newProjectBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Novo projeto
+        </button>
+      </div>
+      <div class="item-list" id="projectList"></div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ============ DRAWER: certificate form ============ -->
+<div class="drawer-overlay" id="certDrawer">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3 id="certDrawerTitle">Novo certificado</h3>
+      <button class="icon-btn" id="certDrawerClose" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+    <form id="certForm">
+      <input type="hidden" id="certId">
+      <div class="field"><label for="certTitle">Nome do certificado</label><input type="text" id="certTitle" required></div>
+      <div class="field"><label for="certTeaches">O que ele ensina</label><input type="text" id="certTeaches" required placeholder="Ex: Fundamentos de edição de vídeo"></div>
+      <div class="field"><label for="certDescription">Descrição</label><textarea id="certDescription" rows="4" required></textarea></div>
+      <div class="field-row">
+        <div class="field"><label for="certStart">Início</label><input type="date" id="certStart" required></div>
+        <div class="field"><label for="certEnd">Conclusão (vazio = em andamento)</label><input type="date" id="certEnd"></div>
+      </div>
+      <div class="field">
+        <label for="certBadgeURL">Link do selo / certificado (opcional)</label>
+        <input type="url" id="certBadgeURL" placeholder="https://...">
+        <p class="field-hint">Aceita link de imagem (jpg/png) ou de um PDF do certificado.</p>
+      </div>
+      <div class="link-preview" id="certBadgePreview">
+        <div class="link-preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-2.4 5 2.4-1.5-6.5"/></svg></div>
+        <div class="link-preview-text">Nenhum selo anexado ainda.</div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-danger btn-sm" id="certDeleteBtn" style="display:none;">Excluir</button>
+        <button type="submit" class="btn btn-primary" id="certSaveBtn">Salvar certificado</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DRAWER: project form ============ -->
+<div class="drawer-overlay" id="projectDrawer">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3 id="projectDrawerTitle">Novo projeto</h3>
+      <button class="icon-btn" id="projectDrawerClose" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+    <form id="projectForm">
+      <input type="hidden" id="projectId">
+      <div class="field-row">
+        <div class="field"><label for="projTitle">Título do vídeo</label><input type="text" id="projTitle" required></div>
+        <div class="field"><label for="projClient">Cliente</label><input type="text" id="projClient" required></div>
+      </div>
+      <div class="field"><label for="projDescription">Descrição</label><textarea id="projDescription" rows="4" required></textarea></div>
+      <div class="field"><label for="projLink">Link do vídeo (YouTube, Vimeo, etc.)</label><input type="url" id="projLink" required placeholder="https://youtube.com/watch?v=..."></div>
+      <div class="link-preview" id="projVideoPreview">
+        <div class="link-preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="14" height="13" rx="2"/><path d="M16.5 10l5-3v10l-5-3z"/></svg></div>
+        <div class="link-preview-text">Cole o link do vídeo para ver a prévia aqui.</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field"><label for="projReceived">Pedido recebido em</label><input type="date" id="projReceived" required></div>
+        <div class="field"><label for="projDelivered">Entregue em</label><input type="date" id="projDelivered" required></div>
+      </div>
+
+      <div class="field">
+        <label for="projCoverURL">Capa / miniatura (opcional)</label>
+        <input type="url" id="projCoverURL" placeholder="https://...">
+        <p class="field-hint">Se deixar em branco, uso a miniatura padrão do próprio vídeo (ex: capa do YouTube).</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-danger btn-sm" id="projectDeleteBtn" style="display:none;">Excluir</button>
+        <button type="submit" class="btn btn-primary" id="projectSaveBtn">Salvar projeto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="toast" id="toast"><span class="toast-dot"></span><span id="toastMsg"></span></div> -->
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

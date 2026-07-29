@@ -1,0 +1,5 @@
+# Only needed if you host on Netlify instead of Firebase Hosting.
+# Firebase Hosting uses the rewrites in firebase.json instead — ignore this
+# file if that's what you're using.
+/admCDX      /admin.html   200
+/admCDX/*    /admin.html   200

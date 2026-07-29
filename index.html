@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDXED — Michel Rezini | Editor de Vídeo</title>
+<meta name="description" content="Portfólio de Michel Rezini (CDXED), editor de vídeo em Santa Catarina. Edição, motion e storytelling com Shotcut, Photoshop, Clipchamp e IA.">
+
+<link rel="shortcut icon" href="favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="container">
+    <a href="#top" class="logo">
+      
+      CD<span class="x">X</span>ED
+    </a>
+
+    <nav class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#formacao">Formação</a>
+      <a href="#contato">Contato</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="#contato" class="btn btn-ghost">Iniciar projeto</a>
+      <button class="nav-burger" id="burgerBtn" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="nav-burger" id="burgerClose" style="position:absolute; top:26px; right:24px;" aria-label="Fechar menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+  </button>
+  <a href="#sobre">Sobre</a>
+  <a href="#projetos">Projetos</a>
+  <a href="#formacao">Formação</a>
+  <a href="#contato">Contato</a>
+  <a href="#contato" class="btn btn-primary">Iniciar projeto</a>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-copy reveal is-visible">
+        <p class="eyebrow">Edição de vídeo, sob encomenda</p>
+        <h1>
+          <span class="hero-hello">Olá<span class="dot">.</span></span>
+          Eu sou <span class="hero-name" id="heroName">Michel Rezini</span>
+        </h1>
+        <p class="role" id="heroRole">Editor de Vídeo — Motion &amp; Storytelling</p>
+        <p class="lede" id="heroLede">Transformo horas de gravação bruta em vídeos que prendem atenção do primeiro ao último segundo. Trabalho com quem já entende o valor de um corte bem-feito — e entrega o briefing certo para eu cuidar do resto.</p>
+
+        <div class="hero-actions">
+          <a href="#contato" class="btn btn-primary">Iniciar um projeto
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#projetos" class="btn btn-ghost">Ver portfólio</a>
+        </div>
+
+        <div class="meta-chips" id="heroChips">
+          <span class="chip status"><span class="pulse-dot"></span> <span id="chipAvailable">Disponível para novos projetos</span></span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7"/><path d="M4 21h16"/><path d="M9 12V8M15 12V8M12 12V8"/></svg><span id="chipAge">16 anos</span></span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg><span id="chipLocation">Santa Catarina, Brasil</span></span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11.2V16c0 1.3 2.7 3 6 3s6-1.7 6-3v-4.8"/></svg><span id="chipEdu">2º ano · Téc. em Informática — IFC</span></span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal is-visible">
+        <div class="ring-wrap" aria-hidden="true">
+          <svg viewBox="0 0 400 400">
+            <g id="tickGroup"></g>
+            <circle cx="200" cy="200" r="188" fill="none" class="ring-arc" stroke-width="2" stroke-dasharray="90 1090" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="photo-frame">
+          <img id="profilePhoto" src="" alt="Foto de Michel Rezini" style="display:none;">
+          <div class="avatar-fallback" id="avatarFallback">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+          </div>
+        </div>
+        <div class="rec-badge"><span class="dot"></span> REC <b id="recTimer">00:00:00</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TOOLS STRIP ============ -->
+  <section class="tools-strip reveal">
+    <div class="container">
+      <span class="label">Caixa de ferramentas</span>
+      <div id="toolsRow" style="display:contents;"></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="sobre">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-bio reveal">
+          <p class="eyebrow"><span class="tc">00:01</span> — Sobre mim</p>
+          <h2>Histórias começam no papel.<br>Ganham vida na timeline.</h2>
+          <div id="bioText">
+            <p>Estudo em tempo integral no Instituto Federal Catarinense (IFC), cursando o Ensino Médio integrado ao Técnico em Informática. Foi entre scripts e projetos de tecnologia que entendi o real papel da edição: não é sobre efeito, é sobre decisão — o que entra, o que sai, e o que faz quem assiste continuar assistindo.</p>
+            <p>Uso Shotcut, Photoshop, Clipchamp e Inteligência Artificial como extensão do processo criativo, sempre em busca do corte certo, no tempo certo, para a história certa.</p>
+          </div>
+
+          <div class="about-meta">
+            <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7"/><path d="M4 21h16"/><path d="M9 12V8M15 12V8M12 12V8"/></svg><span><b id="metaAge">16 anos</span></b></div>
+            <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg><span><b id="metaLocation">Santa Catarina, Brasil</b></span></div>
+            <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11.2V16c0 1.3 2.7 3 6 3s6-1.7 6-3v-4.8"/></svg><span><b id="metaEdu">2º ano · Téc. em Informática — IFC</b> — Ensino Médio integrado, tempo integral (IFC)</span></div>
+          </div>
+
+          <div class="stats-row" id="statsRow">
+            <div class="stat-card"><div class="stat-num" id="statProjects">0<span class="suffix">+</span></div><div class="stat-label">Projetos entregues</div></div>
+            <div class="stat-card"><div class="stat-num" id="statCerts">0<span class="suffix">+</span></div><div class="stat-label">Certificados</div></div>
+            <div class="stat-card"><div class="stat-num" id="statSkills">0<span class="suffix">+</span></div><div class="stat-label">Ferramentas</div></div>
+          </div>
+        </div>
+
+        <div class="skills-panel reveal">
+          <h3>Domínio técnico</h3>
+          <div id="skillsList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="section" id="projetos">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span class="tc">00:02</span> — Projetos</p>
+          <h2>Cada entrega é um argumento a seu favor.</h2>
+          <p class="lede">Trabalhos reais, com prazos reais e clientes reais. Assista, compare, e decida se o próximo corte deveria ser o seu.</p>
+        </div>
+      </div>
+      <div class="projects-grid reveal-stagger" id="projectsGrid">
+        <div class="empty-state" style="grid-column:1/-1;">
+          <div class="spinner" style="margin:0 auto;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATES ============ -->
+  <section class="section" id="formacao">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span class="tc">00:03</span> — Formação</p>
+          <h2>Bases construídas antes de cada export.</h2>
+          <p class="lede">Certificações e cursos que sustentam cada decisão técnica por trás da edição.</p>
+        </div>
+      </div>
+      <div class="timeline reveal" id="certTimeline"><div class="spinner" style="margin:0 auto;"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section" id="contato">
+    <div class="container">
+      <div class="contact-panel reveal">
+        <p class="eyebrow" style="justify-content:center;"><span class="tc">00:04</span> — Contato</p>
+        <h2>Ideias boas não esperam.<br>Prazos bons, também não.</h2>
+        <p class="lede">Não entro em qualquer briefing — entro nos que têm potencial de virar um vídeo memorável. Me conte o objetivo, o prazo e o material bruto que você tem; eu devolvo o caminho mais direto até um corte final que funciona. Alinho poucos projetos por vez para manter a qualidade de cada entrega — se as vagas do mês fecharem, você entra na fila do próximo ciclo.</p>
+
+        <div class="contact-actions">
+          <a class="btn btn-primary" id="mailBtn" href="mailto:c0d3xed@gmail.com?subject=Novo%20projeto%20de%20edi%C3%A7%C3%A3o&body=Ol%C3%A1%20Michel%2C%0D%0A%0D%0AQuero%20conversar%20sobre%20um%20projeto.%0D%0A%0D%0AObjetivo%3A%20%0D%0APrazo%3A%20%0D%0AMaterial%20bruto%20dispon%C3%ADvel%3A%20">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>
+            Enviar e-mail
+          </a>
+          <button class="btn btn-ghost" id="discordBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+  <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/>
+</svg>
+            Chamar no Discord
+          </button>
+        </div>
+
+        <div class="contact-copy-row">
+          <span class="copy-item" data-copy="c0d3xed@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2.3"/><path d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3H5.5A2.5 2.5 0 0 0 3 5.5v8A2.5 2.5 0 0 0 5.5 16H8"/></svg>
+            c0d3xed@gmail.com
+          </span>
+          <span class="copy-item" data-copy="c0d3xx">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2.3"/><path d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3H5.5A2.5 2.5 0 0 0 3 5.5v8A2.5 2.5 0 0 0 5.5 16H8"/></svg>
+            @c0d3xx (Discord)
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="#top" class="logo" style="font-size:17px;">
+      CD<span class="x">X</span>ED
+    </a>
+    <nav class="footer-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#projetos">Projetos</a>
+      <a href="#formacao">Formação</a>
+      <a href="#contato">Contato</a>
+      <a href="mailto:c0d3xed@gmail.com">c0d3xed@gmail.com</a>
+    </nav>
+    <span class="footer-copy" id="footerCopy">© 2026 CDXED — Michel Rezini. Todos os cortes reservados.</span>
+  </div>
+</footer>
+
+<!-- Project modal -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-box" id="modalBox" style="position:relative;">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <div class="modal-video" id="modalVideoWrap"></div>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- <div class="toast" id="toast"><span class="toast-dot"></span><span id="toastMsg"></span></div> -->
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
