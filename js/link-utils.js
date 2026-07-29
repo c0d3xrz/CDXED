@@ -83,3 +83,38 @@ export function isPdfUrl(rawUrl) {
     return /\.pdf($|\?)/i.test(u.pathname);
   } catch (_) { return false; }
 }
+
+/**
+ * Minimal sanitizer for a pasted <svg>...</svg> contact icon before it's
+ * stored or rendered with innerHTML. Only the signed-in admin can write
+ * this value (see firestore.rules), so this isn't defending against a
+ * third-party attacker — it's a safety net against pasting something that
+ * isn't a clean icon (a stray <script>, an inline event handler, a
+ * javascript: URL) and having it silently run on the public site. Returns
+ * '' if the input doesn't look like a bare <svg> element.
+ */
+export function sanitizeSvgIcon(raw) {
+  let svg = (raw || '').trim();
+  if (!/^<svg[\s>]/i.test(svg) || !/<\/svg>\s*$/i.test(svg)) return '';
+  svg = svg.replace(/<script[\s\S]*?<\/script>/gi, '');
+  svg = svg.replace(/\son\w+\s*=\s*"[^"]*"/gi, '');
+  svg = svg.replace(/\son\w+\s*=\s*'[^']*'/gi, '');
+  svg = svg.replace(/(href|xlink:href|src)(\s*=\s*)(["'])\s*javascript:[^"']*\3/gi, '$1$2$3#$3');
+  return svg;
+}
+
+/**
+ * Validates a contact button's link/value before it's used as an href.
+ * Accepts http(s), mailto and tel — enough for a link-in-bio style contact
+ * (profile links, e-mail, phone) — and rejects anything else (notably
+ * javascript: URLs). Returns '' when the value isn't a safe, usable link.
+ */
+export function safeContactUrl(rawUrl) {
+  const url = (rawUrl || '').trim();
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    if (['http:', 'https:', 'mailto:', 'tel:'].includes(u.protocol)) return url;
+  } catch (_) {}
+  return '';
+}

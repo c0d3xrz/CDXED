@@ -263,14 +263,9 @@
 }
 .contact-panel h2{ max-width: 760px; margin: 0 auto 18px; }
 .contact-panel .lede{ margin: 0 auto 40px; max-width: 620px; }
-.contact-actions{ display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.contact-copy-row{ margin-top: 26px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
-.copy-item{
-  display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-ui); font-size: 13.5px; color: var(--ink-faint);
-  cursor: pointer; transition: color .25s var(--ease);
-}
-.copy-item:hover{ color: var(--blue-bright); }
-.copy-item svg{ width: 15px; height: 15px; }
+.contact-actions{ display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; min-height: 52px; }
+.contact-btn[href]{ cursor: pointer; }
+.contact-btn:not([href]):not(button){ cursor: default; }
 
 /* ---------------- Footer ---------------- */
 .site-footer{ padding: 50px 0 34px; border-top: 1px solid var(--line); position: relative; z-index: 1; }

@@ -6,7 +6,7 @@
 <title>Painel administrativo — CDXED</title>
 <meta name="robots" content="noindex, nofollow">
 
-<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/favicon-180.png">
 
@@ -86,6 +86,10 @@
         <button class="tab-btn" data-tab="projetos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="14" height="13" rx="2"/><path d="M16.5 10l5-3v10l-5-3z"/></svg>
           Projetos
+        </button>
+        <button class="tab-btn" data-tab="contatos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5l5-5"/><path d="M8 16.5l-1.8 1.8a3.5 3.5 0 0 1-5-5L3 11.5M16 7.5l1.8-1.8a3.5 3.5 0 0 1 5 5L21 12.5"/></svg>
+          Contatos
         </button>
       </nav>
     </div>
@@ -192,6 +196,21 @@
       <div class="item-list" id="projectList"></div>
     </section>
 
+    <!-- ---------- CONTATOS ---------- -->
+    <section class="tab-panel" id="panel-contatos">
+      <div class="panel-head">
+        <div>
+          <h2>Contatos</h2>
+          <p>Botões exibidos na seção "Contato" do site — cada um pode abrir um link ou copiar um texto, à sua escolha.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="newContactBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Novo contato
+        </button>
+      </div>
+      <div class="item-list" id="contactList"></div>
+    </section>
+
   </div>
 </div>
 
@@ -266,6 +285,54 @@
       <div class="form-actions">
         <button type="button" class="btn btn-danger btn-sm" id="projectDeleteBtn" style="display:none;">Excluir</button>
         <button type="submit" class="btn btn-primary" id="projectSaveBtn">Salvar projeto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DRAWER: contact form ============ -->
+<div class="drawer-overlay" id="contactDrawer">
+  <div class="drawer">
+    <div class="drawer-head">
+      <h3 id="contactDrawerTitle">Novo contato</h3>
+      <button class="icon-btn" id="contactDrawerClose" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+    <form id="contactForm">
+      <input type="hidden" id="contactId">
+      <div class="field">
+        <label for="contactName">Nome do contato</label>
+        <input type="text" id="contactName" required placeholder="Ex: Instagram, GitHub, WhatsApp...">
+      </div>
+
+      <div class="field">
+        <label for="contactIcon">SVG do ícone</label>
+        <textarea id="contactIcon" rows="4" required placeholder="&lt;svg viewBox=&quot;0 0 24 24&quot;&gt;...&lt;/svg&gt;"></textarea>
+        <p class="field-hint">Cole o código completo &lt;svg&gt;...&lt;/svg&gt; do ícone (ex: copiado do Simple Icons ou Bootstrap Icons).</p>
+      </div>
+      <div class="link-preview" id="contactIconPreview">
+        <div class="link-preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5l5-5"/><path d="M8 16.5l-1.8 1.8a3.5 3.5 0 0 1-5-5L3 11.5M16 7.5l1.8-1.8a3.5 3.5 0 0 1 5 5L21 12.5"/></svg></div>
+        <div class="link-preview-text">Cole o SVG para ver a prévia aqui.</div>
+      </div>
+
+      <div class="field">
+        <label for="contactType">Ao clicar…</label>
+        <select id="contactType">
+          <option value="link">Abrir um link</option>
+          <option value="copy">Copiar texto para a área de transferência</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="contactValue" id="contactValueLabel">Link do contato (opcional)</label>
+        <input type="text" id="contactValue" placeholder="https://instagram.com/seu-usuario">
+        <p class="field-hint" id="contactValueHint">Ex: o link direto do seu perfil do Instagram. Deixe em branco se ainda não tiver o link.</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-danger btn-sm" id="contactDeleteBtn" style="display:none;">Excluir</button>
+        <button type="submit" class="btn btn-primary" id="contactSaveBtn">Salvar contato</button>
       </div>
     </form>
   </div>
