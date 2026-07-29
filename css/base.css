@@ -233,7 +233,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
-/* ---- Toast ---- */
+/* ---- Toast ----
 .toast{
   position: fixed;
   left: 50%;
@@ -256,4 +256,4 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .toast.ok .toast-dot{ background: var(--success); }
 .toast.err{ border-color: rgba(255,93,108,.35); }
 .toast.err .toast-dot{ background: var(--danger); }
-.toast-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; }
+.toast-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex: none; } */
