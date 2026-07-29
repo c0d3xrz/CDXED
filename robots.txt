@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://c0d3xed.online/sitemap.xml
